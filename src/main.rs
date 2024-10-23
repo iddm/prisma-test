@@ -8,6 +8,7 @@ mod error;
 mod filter;
 mod table;
 
+#[allow(dead_code)]
 fn manually() -> Result<(), Box<dyn Error>> {
     let data_table = csv_table::CsvTable::from_csv("data.csv")?;
 
@@ -31,6 +32,7 @@ fn manually() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+#[allow(dead_code)]
 fn with_parser() -> Result<(), Box<dyn Error>> {
     let data_table = csv_table::CsvTable::from_csv("data.csv")?;
 

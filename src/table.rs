@@ -1,4 +1,5 @@
 //! An abstract table representation and query engine.
+#![allow(dead_code)]
 
 use std::collections::HashMap;
 use std::ops::{Deref, DerefMut};
@@ -180,7 +181,6 @@ impl ApplyColumnFilterByValue for ColumnValue {
         match self {
             ColumnValue::Integer(value) => value.apply_filter_by_value(filter),
             ColumnValue::String(value) => value.apply_filter_by_value(filter),
-            _ => Err(crate::error::FilterError::InvalidFilterValueType.into()),
         }
     }
 }

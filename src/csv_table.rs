@@ -1,7 +1,7 @@
 //! A table abstraction using CSV.
 
 use csv::Reader;
-use std::{collections::HashMap, error::Error, iter::Filter};
+use std::{collections::HashMap, error::Error};
 
 use crate::{
     filter::{ApplyTableFilterByValue, FilterColumns, FilterQueryIterator},
@@ -40,7 +40,7 @@ impl CsvTable {
     {
         let filter_columns = FilterColumns::try_from(filter_columns)?;
 
-        FilterQueryIterator::new(Box::new(self.get_rows()), filter_columns).for_each(|row| {
+        self.apply_filter(&filter_columns).for_each(|row| {
             println!("{row:?}");
         });
 

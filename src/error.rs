@@ -13,6 +13,7 @@ pub enum FilterError {
     InvalidFilterValueType,
     /// If for some reason the values cannot be compared. For example,
     /// two floating point values are NaN.
+    #[allow(dead_code)]
     ValuesCannotBeCompared,
     /// A filter parse error.
     ParseError(String),
@@ -43,9 +44,9 @@ impl std::error::Error for FilterError {}
 #[derive(Debug)]
 pub enum Error {
     /// A value parse error.
-    ValueParseError(String),
+    ValueParse(String),
     /// A filter error.
-    FilterError(FilterError),
+    Filter(FilterError),
     /// Any other error type.
     Other(Box<dyn std::error::Error>),
 }
@@ -53,8 +54,8 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::ValueParseError(e) => write!(f, "Value parse error: {e}"),
-            Self::FilterError(e) => write!(f, "Filter error: {e}"),
+            Self::ValueParse(e) => write!(f, "Value parse error: {e}"),
+            Self::Filter(e) => write!(f, "Filter error: {e}"),
             Self::Other(e) => write!(f, "Other error: {e}"),
         }
     }
@@ -64,7 +65,7 @@ impl std::error::Error for Error {}
 
 impl From<FilterError> for Error {
     fn from(e: FilterError) -> Self {
-        Self::FilterError(e)
+        Self::Filter(e)
     }
 }
 
@@ -88,6 +89,6 @@ impl From<csv::Error> for Error {
 
 impl From<ParseIntError> for Error {
     fn from(e: ParseIntError) -> Self {
-        Self::ValueParseError(e.to_string())
+        Self::ValueParse(e.to_string())
     }
 }
