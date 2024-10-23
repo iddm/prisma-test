@@ -41,7 +41,10 @@ impl CsvTable {
         let filter_columns = FilterColumns::try_from(filter_columns)?;
 
         self.apply_filter(&filter_columns).for_each(|row| {
-            println!("{row:?}");
+            for (col_name, value) in row {
+                print!("{}: {} ", col_name, value);
+            }
+            println!()
         });
 
         Ok(())

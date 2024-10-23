@@ -16,7 +16,7 @@ pub enum FilterError {
     #[allow(dead_code)]
     ValuesCannotBeCompared,
     /// A filter parse error.
-    ParseError(String),
+    Parse(String),
 }
 
 impl std::fmt::Display for FilterError {
@@ -31,8 +31,8 @@ impl std::fmt::Display for FilterError {
             Self::ValuesCannotBeCompared => {
                 write!(f, "The values cannot be compared")
             }
-            Self::ParseError(e) => {
-                write!(f, "Parse error: {e}")
+            Self::Parse(e) => {
+                write!(f, "Parsing failed: {e}")
             }
         }
     }
@@ -54,9 +54,9 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::ValueParse(e) => write!(f, "Value parse error: {e}"),
-            Self::Filter(e) => write!(f, "Filter error: {e}"),
-            Self::Other(e) => write!(f, "Other error: {e}"),
+            Self::ValueParse(e) => write!(f, "Value parse: {e}"),
+            Self::Filter(e) => write!(f, "Filter: {e}"),
+            Self::Other(e) => write!(f, "Other: {e}"),
         }
     }
 }

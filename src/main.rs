@@ -60,7 +60,7 @@ fn repl_loop(data_table: CsvTable) -> Result<(), Box<dyn Error>> {
         let filter = match filter::parse_filter_query(&input) {
             Ok(filter) => filter,
             Err(e) => {
-                eprintln!("Parsing error occured: {e}");
+                eprintln!("{e}");
                 continue;
             }
         };

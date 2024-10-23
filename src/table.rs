@@ -13,6 +13,12 @@ use crate::filter::{ApplyColumnFilterByValue, FilterByValue};
 #[repr(transparent)]
 pub struct IntegerColumnType(pub i64);
 
+impl std::fmt::Display for IntegerColumnType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.0)
+    }
+}
+
 impl ApplyColumnFilterByValue for IntegerColumnType {
     fn apply_filter_by_value(&self, filter: &FilterByValue) -> Result<bool> {
         let value = match filter.value {
@@ -77,6 +83,12 @@ impl ApplyColumnFilterByValue for StringColumnType {
             crate::filter::Operation::GreaterThan => self > value,
             crate::filter::Operation::LessThan => self < value,
         })
+    }
+}
+
+impl std::fmt::Display for StringColumnType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.0)
     }
 }
 
@@ -172,6 +184,15 @@ impl FromStr for ColumnValue {
             Ok(ColumnValue::Integer(value))
         } else {
             Ok(ColumnValue::String(StringColumnType(s.to_string())))
+        }
+    }
+}
+
+impl std::fmt::Display for ColumnValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ColumnValue::Integer(value) => write!(f, "{value}"),
+            ColumnValue::String(value) => write!(f, "{value}"),
         }
     }
 }

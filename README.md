@@ -40,6 +40,7 @@ did not evaluate each one of them.
 ### Given more time, what improvements or optimizations would you want to add?
 
 I'd first look at the filter iterator performance.
+Better output. I'd at least provide a tui interface.
 
 ### When would you add them?
 

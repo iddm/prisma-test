@@ -40,11 +40,7 @@ impl FromStr for Operation {
             "=" => Self::Equal,
             ">" => Self::GreaterThan,
             "<" => Self::LessThan,
-            _ => {
-                return Err(
-                    FilterError::ParseError(format!("Invalid filter operation: {s}")).into(),
-                )
-            }
+            _ => return Err(FilterError::Parse(format!("Invalid filter operation: {s}")).into()),
         })
     }
 }
@@ -184,8 +180,8 @@ struct QueryParser;
 
 /// Parses a filter query string into a [`FilterColumns`] struct.
 pub fn parse_filter_query(input: &str) -> Result<FilterColumns> {
-    let mut pairs = QueryParser::parse(Rule::query, input)
-        .map_err(|e| FilterError::ParseError(format!("{e:?}")))?;
+    let mut pairs =
+        QueryParser::parse(Rule::query, input).map_err(|e| FilterError::Parse(e.to_string()))?;
 
     let mut output_columns = Vec::new();
     let mut filters = HashMap::new();
@@ -193,7 +189,7 @@ pub fn parse_filter_query(input: &str) -> Result<FilterColumns> {
     // There should be a single pair representing the entire query
     let query_pair = pairs
         .next()
-        .ok_or_else(|| FilterError::ParseError("Expected query".to_string()))?;
+        .ok_or_else(|| FilterError::Parse("Expected query".to_string()))?;
 
     // Iterate over the inner pairs of the `query` rule
     for pair in query_pair.into_inner() {
@@ -201,7 +197,7 @@ pub fn parse_filter_query(input: &str) -> Result<FilterColumns> {
             Rule::project => {
                 for columns in pair.into_inner() {
                     if columns.as_rule() != Rule::columns {
-                        return Err(FilterError::ParseError("Expected columns".to_string()).into());
+                        return Err(FilterError::Parse("Expected columns".to_string()).into());
                     }
 
                     for column in columns.into_inner() {
@@ -214,12 +210,12 @@ pub fn parse_filter_query(input: &str) -> Result<FilterColumns> {
             Rule::filters => {
                 for filter in pair.into_inner() {
                     if filter.as_rule() != Rule::filter {
-                        return Err(FilterError::ParseError("Expected filter".to_string()).into());
+                        return Err(FilterError::Parse("Expected filter".to_string()).into());
                     }
 
                     for filter_expression in filter.into_inner() {
                         if filter_expression.as_rule() != Rule::filter_expression {
-                            return Err(FilterError::ParseError(
+                            return Err(FilterError::Parse(
                                 "Expected filter expression".to_string(),
                             )
                             .into());
